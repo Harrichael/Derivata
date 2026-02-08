@@ -1,0 +1,16 @@
+\documentclass{article}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\begin{document}
+\begin{center}
+\begin{tikzpicture}[
+  every tree node/.style={draw, circle, minimum size=1cm, font=\large},
+  level distance=1.5cm,
+  sibling distance=1.5cm,
+  edge from parent/.style={draw, -latex, thick}
+]
+\Tree {{ tree_code }}
+\end{tikzpicture}
+\end{center}
+\end{document}

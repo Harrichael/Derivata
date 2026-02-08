@@ -1,4 +1,5 @@
-from jinja2 import Template
+from jinja2 import Environment, FileSystemLoader
+import os
 
 class TreeNode:
     def __init__(self, value):
@@ -38,29 +39,27 @@ def main():
     child1.add_child(grandchild1)
     child2.add_child(grandchild2)
 
-    # Generate LaTeX tree code
-    tree_code = generate_latex_tree(root)
+    # Load templates from files
+    template_dir = os.path.dirname(os.path.abspath(__file__))
+    env = Environment(loader=FileSystemLoader(template_dir))
+    
+    # Render the tree structure using jinja2
+    tree_tmpl = env.get_template('tree_template.j2')
+    tree_code = tree_tmpl.render(root=root).strip()
+    
+    # Render the full LaTeX document
+    doc_tmpl = env.get_template('document_template.j2')
+    latex_document = doc_tmpl.render(tree_code=tree_code)
 
-    # Define the Jinja2 LaTeX template
-    latex_template = r"""
-\documentclass{standalone}
-\usepackage{tikz}
-\usepackage{tikz-qtree}
-\begin{document}
-\begin{tikzpicture}
-\Tree {{ tree_code }}
-\end{tikzpicture}
-\end{document}
-"""
-    # Render the template with the tree code
-    template = Template(latex_template)
-    latex_document = template.render(tree_code=tree_code)
-
-    # Output to a .tex file
-    with open("tree_output.tex", "w") as f:
+    # Output to latex_gen folder
+    output_dir = os.path.join(os.path.dirname(template_dir), 'latex_gen')
+    os.makedirs(output_dir, exist_ok=True)
+    output_file = os.path.join(output_dir, 'tree_output.tex')
+    
+    with open(output_file, "w") as f:
         f.write(latex_document)
     
-    print("LaTeX code for the tree has been written to 'tree_output.tex'.")
+    print(f"LaTeX code for the tree has been written to '{output_file}'.")
 
 if __name__ == "__main__":
     main()

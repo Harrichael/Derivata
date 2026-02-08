@@ -1,0 +1,4 @@
+{%- macro render_node(node) -%}
+[.{{ node.value }} {% for child in node.children %}{{ render_node(child) }}{% endfor %}]
+{%- endmacro -%}
+{{ render_node(root) }}

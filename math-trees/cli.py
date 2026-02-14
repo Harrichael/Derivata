@@ -6,6 +6,7 @@ Derivata CLI - Command-line interface for generating math trees and expressions
 import os
 import sys
 import click
+from generate_arithmetic_tree import generate_arithmetic_tree_latex
 
 
 def get_latex_gen_dir():
@@ -74,6 +75,43 @@ def clean(force, dry_run):
         click.secho(f"✓ Dry run: would clean {deleted_count} file(s) from latex_gen", fg='green')
     else:
         click.secho(f"✓ Cleaned {deleted_count} file(s) from latex_gen", fg='green')
+
+
+@cli.command()
+@click.option('-t', '--target', type=int, default=42, show_default=True, 
+              help='Target value for the arithmetic expression')
+@click.option('-d', '--depth', type=int, default=2, show_default=True,
+              help='Depth of the expression tree (number of operation levels)')
+@click.option('-o', '--output', type=str, default='tree.tex', show_default=True,
+              help='Output filename (in latex_gen folder)')
+@click.option('--no-pdf', is_flag=True, help='Skip PDF compilation')
+def generate(target, depth, output, no_pdf):
+    """Generate an arithmetic expression tree."""
+    
+    if depth < 0:
+        click.secho("✗ Depth must be non-negative", fg='red')
+        sys.exit(1)
+    
+    if not output.endswith('.tex'):
+        output = f"{output}.tex"
+    
+    try:
+        click.echo(f"Generating arithmetic expression tree:")
+        click.echo(f"  Target value: {target}")
+        click.echo(f"  Depth: {depth}")
+        click.echo(f"  Output: {output}")
+        click.echo()
+        
+        generate_arithmetic_tree_latex(
+            target_value=target,
+            depth=depth,
+            output_filename=output,
+            compile_pdf=not no_pdf
+        )
+        
+    except Exception as e:
+        click.secho(f"✗ Error generating tree: {e}", fg='red')
+        sys.exit(1)
 
 
 if __name__ == '__main__':

@@ -54,7 +54,7 @@ def compile_latex_to_pdf(tex_file_path):
 
 def arithmetic_to_tree_node(arith_node):
     """Convert ArithmeticNode to TreeNode for visualization."""
-    from main import TreeNode
+    from tree_node import TreeNode
     
     if arith_node.is_leaf():
         return TreeNode(str(arith_node.value))

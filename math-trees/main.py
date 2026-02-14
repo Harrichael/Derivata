@@ -1,14 +1,7 @@
 from jinja2 import Environment, FileSystemLoader
 import os
 import subprocess
-
-class TreeNode:
-    def __init__(self, value):
-        self.value = value
-        self.children = []
-
-    def add_child(self, child):
-        self.children.append(child)
+from tree_node import TreeNode
 
 def generate_latex_tree(node, indent=0):
     """Generate LaTeX code for a tree using qtree syntax (kept for reference)."""

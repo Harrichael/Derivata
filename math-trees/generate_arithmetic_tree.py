@@ -74,14 +74,3 @@ def generate_arithmetic_tree_latex(target_value, depth, output_filename="arithme
     if compile_pdf:
         compile_latex_to_pdf(output_file)
 
-
-if __name__ == "__main__":
-    # Generate a few examples
-    print("Example 1: Expression that equals 42 with depth 2")
-    print("="*60)
-    generate_arithmetic_tree_latex(42, 2, "example_42.tex")
-    
-    print("\n\nExample 2: Expression that equals 100 with depth 3")
-    print("="*60)
-    generate_arithmetic_tree_latex(100, 3, "example_100.tex")
-

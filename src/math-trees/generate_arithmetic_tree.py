@@ -60,8 +60,10 @@ def generate_arithmetic_tree_latex(target_value, depth, output_filename="arithme
     doc_tmpl = env.get_template('document_template.j2')
     latex_document = doc_tmpl.render(tree_code=tree_code)
     
-    # Output to gen folder at repo root
-    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # Output to gen folder at repo root (navigate up from src/math-trees/ to repo root)
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # src/math-trees/
+    src_dir = os.path.dirname(script_dir)  # src/
+    repo_root = os.path.dirname(src_dir)  # Derivata/
     output_dir = os.path.join(repo_root, 'gen')
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, output_filename)

@@ -6,6 +6,10 @@ Derivata CLI - Command-line interface for generating math trees and expressions
 import os
 import sys
 import click
+
+# Add math-trees to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'math-trees'))
+
 from generate_arithmetic_tree import generate_arithmetic_tree_latex
 
 

@@ -39,7 +39,7 @@ def clean(force, dry_run):
         return
     
     # Count files before deletion
-    files = [f for f in os.listdir(gen_dir) if os.path.isfile(os.path.join(gen_dir, f))]
+    files = sorted([f for f in os.listdir(gen_dir) if os.path.isfile(os.path.join(gen_dir, f))])
     file_count = len(files)
     
     if file_count == 0:
@@ -48,7 +48,15 @@ def clean(force, dry_run):
     
     # Confirm deletion if not forced
     if not force:
-        if not click.confirm(f"Delete {file_count} file(s) from gen?"):
+        # Show up to 4 files
+        files_to_show = files[:4]
+        click.echo(f"Delete {file_count} file(s) from gen:")
+        for i, filename in enumerate(files_to_show, 1):
+            click.echo(f"  {i}. {filename}")
+        if file_count > 4:
+            click.echo(f"  ... and {file_count - 4} more")
+
+        if not click.confirm("Continue?"):
             click.echo("Cancelled")
             return
     

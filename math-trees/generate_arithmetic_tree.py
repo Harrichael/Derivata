@@ -48,8 +48,8 @@ def generate_arithmetic_tree_latex(target_value, depth, output_filename="arithme
     # Convert to tree structure
     tree_root = arithmetic_to_tree_node(arith_expr)
     
-    # Load templates
-    template_dir = os.path.dirname(os.path.abspath(__file__))
+    # Load templates from templates folder
+    template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
     env = Environment(loader=FileSystemLoader(template_dir))
     
     # Render the tree structure
@@ -60,8 +60,9 @@ def generate_arithmetic_tree_latex(target_value, depth, output_filename="arithme
     doc_tmpl = env.get_template('document_template.j2')
     latex_document = doc_tmpl.render(tree_code=tree_code)
     
-    # Output to latex_gen folder
-    output_dir = os.path.join(os.path.dirname(template_dir), 'latex_gen')
+    # Output to latex_gen folder at repo root
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    output_dir = os.path.join(repo_root, 'latex_gen')
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, output_filename)
     

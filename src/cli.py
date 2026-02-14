@@ -6,6 +6,7 @@ Derivata CLI - Command-line interface for generating math trees and expressions
 import os
 import sys
 import click
+from prettytable import PrettyTable
 
 # Add math-trees to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'math-trees'))
@@ -48,29 +49,46 @@ def clean(force, dry_run):
     
     # Confirm deletion if not forced
     if not force:
-        # Show up to 20 files in multi-column format
+        # Show up to 20 files in table format
         import shutil
         terminal_width = shutil.get_terminal_size().columns
-        files_to_show = files[:20]
+        files_to_show = files[:24]
         remaining = file_count - len(files_to_show)
         
         click.echo("Files to delete:")
+        click.echo()
         
-        # Display in 2 columns using click's formatting
-        for i in range(0, len(files_to_show), 2):
-            left = f"  {i+1:2d}. {files_to_show[i]}"
-            if i + 1 < len(files_to_show):
-                right = f"{i+2:2d}. {files_to_show[i+1]}"
-                # Calculate spacing for alignment (default to 40 chars per column)
-                spacing = max(min(terminal_width // 2, 40) - len(left), 2)
-                click.echo(f"{left}{' ' * spacing}{right}")
-            else:
-                click.echo(left)
+        # Determine number of columns based on terminal width
+        # Assuming ~25 chars per filename + padding
+        num_columns = min(4, max(2, terminal_width // 30))
+        
+        # Create table
+        table = PrettyTable()
+        table.header = False
+        table.border = False
+        table.align = "l"
+        table.padding_width = 2
+        
+        # Add rows
+        rows = []
+        for i in range(0, len(files_to_show), num_columns):
+            row = []
+            for j in range(num_columns):
+                idx = i + j
+                if idx < len(files_to_show):
+                    row.append(f"{idx+1:2d}. {files_to_show[idx]}")
+                else:
+                    row.append("")
+            rows.append(row)
+        
+        for row in rows:
+            table.add_row(row)
+        
+        click.echo(table)
         
         if remaining > 0:
-            click.echo(f"  ... and {remaining} more")
+            click.echo(f"... and {remaining} more\n")
         
-        click.echo()
         if not click.confirm(f"Delete {file_count} file(s)?"):
             click.echo("Cancelled")
             return

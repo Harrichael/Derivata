@@ -50,8 +50,8 @@ generate_arithmetic_tree_latex(
     output_filename="my_expression.tex"
 )
 
-# This creates latex_gen/my_expression.tex
-# Compile with: cd ../latex_gen && pdflatex my_expression.tex
+# This creates gen/my_expression.tex
+# Compile with: cd ../gen && pdflatex my_expression.tex
 ```
 
 ## Parameters

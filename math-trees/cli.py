@@ -9,11 +9,11 @@ import click
 from generate_arithmetic_tree import generate_arithmetic_tree_latex
 
 
-def get_latex_gen_dir():
-    """Get the path to the latex_gen directory."""
+def get_gen_dir():
+    """Get the path to the gen directory."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     repo_root = os.path.dirname(script_dir)
-    return os.path.join(repo_root, 'latex_gen')
+    return os.path.join(repo_root, 'gen')
 
 
 @click.group()
@@ -27,24 +27,24 @@ def cli():
 @click.option('-f', '--force', is_flag=True, help='Skip confirmation prompt')
 @click.option('-n', '--dry-run', is_flag=True, help='Show what would be deleted without actually deleting')
 def clean(force, dry_run):
-    """Clean the latex_gen output folder."""
-    latex_gen_dir = get_latex_gen_dir()
+    """Clean the gen output folder."""
+    gen_dir = get_gen_dir()
     
-    if not os.path.exists(latex_gen_dir):
-        click.secho("✓ latex_gen folder doesn't exist - nothing to clean", fg='green')
+    if not os.path.exists(gen_dir):
+        click.secho("✓ gen folder doesn't exist - nothing to clean", fg='green')
         return
     
     # Count files before deletion
-    files = [f for f in os.listdir(latex_gen_dir) if os.path.isfile(os.path.join(latex_gen_dir, f))]
+    files = [f for f in os.listdir(gen_dir) if os.path.isfile(os.path.join(gen_dir, f))]
     file_count = len(files)
     
     if file_count == 0:
-        click.secho("✓ latex_gen folder is already empty", fg='green')
+        click.secho("✓ gen folder is already empty", fg='green')
         return
     
     # Confirm deletion if not forced
     if not force:
-        if not click.confirm(f"Delete {file_count} file(s) from latex_gen?"):
+        if not click.confirm(f"Delete {file_count} file(s) from gen?"):
             click.echo("Cancelled")
             return
     
@@ -53,7 +53,7 @@ def clean(force, dry_run):
     errors = []
     
     for filename in files:
-        file_path = os.path.join(latex_gen_dir, filename)
+        file_path = os.path.join(gen_dir, filename)
         try:
             if os.path.exists(file_path):
                 if dry_run:
@@ -72,9 +72,9 @@ def clean(force, dry_run):
         sys.exit(1)
     
     if dry_run:
-        click.secho(f"✓ Dry run: would clean {deleted_count} file(s) from latex_gen", fg='green')
+        click.secho(f"✓ Dry run: would clean {deleted_count} file(s) from gen", fg='green')
     else:
-        click.secho(f"✓ Cleaned {deleted_count} file(s) from latex_gen", fg='green')
+        click.secho(f"✓ Cleaned {deleted_count} file(s) from gen", fg='green')
 
 
 @cli.command()
@@ -83,7 +83,7 @@ def clean(force, dry_run):
 @click.option('-d', '--depth', type=int, default=2, show_default=True,
               help='Depth of the expression tree (number of operation levels)')
 @click.option('-o', '--output', type=str, default='tree.tex', show_default=True,
-              help='Output filename (in latex_gen folder)')
+              help='Output filename (in gen folder)')
 @click.option('--no-pdf', is_flag=True, help='Skip PDF compilation')
 def generate(target, depth, output, no_pdf):
     """Generate an arithmetic expression tree."""

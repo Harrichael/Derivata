@@ -13,7 +13,7 @@ dist/
 build/
 
 # LaTeX generated files
-latex_gen/
+gen/
 
 # LaTeX build artifacts (if generated elsewhere)
 *.aux

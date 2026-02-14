@@ -36,7 +36,7 @@ def generate_arithmetic_tree_latex(target_value, depth, output_filename="arithme
     Args:
         target_value: The desired result
         depth: Expression depth
-        output_filename: Output filename in latex_gen folder
+        output_filename: Output filename in gen folder
         compile_pdf: Whether to automatically compile to PDF (default: True)
     """
     # Generate arithmetic expression
@@ -60,9 +60,9 @@ def generate_arithmetic_tree_latex(target_value, depth, output_filename="arithme
     doc_tmpl = env.get_template('document_template.j2')
     latex_document = doc_tmpl.render(tree_code=tree_code)
     
-    # Output to latex_gen folder at repo root
+    # Output to gen folder at repo root
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    output_dir = os.path.join(repo_root, 'latex_gen')
+    output_dir = os.path.join(repo_root, 'gen')
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, output_filename)
     

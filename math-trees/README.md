@@ -20,11 +20,11 @@ sudo apt-get install -y texlive-pictures texlive-latex-extra
 
 ```bash
 python3 main.py
-cd ../latex_gen
+cd ../gen
 pdflatex tree_output.tex
 ```
 
-Generated files will be in the `latex_gen/` folder at the repository root.
+Generated files will be in the `gen/` folder at the repository root.
 
 ## Templates
 

@@ -48,15 +48,30 @@ def clean(force, dry_run):
     
     # Confirm deletion if not forced
     if not force:
-        # Show up to 4 files
-        files_to_show = files[:4]
-        click.echo(f"Delete {file_count} file(s) from gen:")
-        for i, filename in enumerate(files_to_show, 1):
-            click.echo(f"  {i}. {filename}")
-        if file_count > 4:
-            click.echo(f"  ... and {file_count - 4} more")
-
-        if not click.confirm("Continue?"):
+        # Show up to 20 files in multi-column format
+        import shutil
+        terminal_width = shutil.get_terminal_size().columns
+        files_to_show = files[:20]
+        remaining = file_count - len(files_to_show)
+        
+        click.echo("Files to delete:")
+        
+        # Display in 2 columns using click's formatting
+        for i in range(0, len(files_to_show), 2):
+            left = f"  {i+1:2d}. {files_to_show[i]}"
+            if i + 1 < len(files_to_show):
+                right = f"{i+2:2d}. {files_to_show[i+1]}"
+                # Calculate spacing for alignment (default to 40 chars per column)
+                spacing = max(min(terminal_width // 2, 40) - len(left), 2)
+                click.echo(f"{left}{' ' * spacing}{right}")
+            else:
+                click.echo(left)
+        
+        if remaining > 0:
+            click.echo(f"  ... and {remaining} more")
+        
+        click.echo()
+        if not click.confirm(f"Delete {file_count} file(s)?"):
             click.echo("Cancelled")
             return
     
